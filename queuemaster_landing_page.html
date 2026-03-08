@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queue-Master | getqueuemaster.com</title>
+  <meta name="description" content="Queue-Master helps teams manage task rotations with a simple, real-time queue. Eliminate paper lists, phone calls, and confusion. Visit getqueuemaster.com." />
+  <style>
+    :root {
+      --navy: #163b7a;
+      --blue: #2563eb;
+      --teal: #14b8a6;
+      --teal-dark: #0f9d8d;
+      --text: #16324f;
+      --muted: #5d718b;
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --line: #dbe7f3;
+      --soft-green: #edf8ee;
+      --soft-blue: #eef5ff;
+      --shadow: 0 12px 32px rgba(22, 59, 122, 0.10);
+      --radius: 20px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: #fff;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: 0.95rem 1.4rem;
+      border-radius: 14px;
+      font-weight: 700;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--teal);
+      color: white;
+      box-shadow: 0 10px 24px rgba(20, 184, 166, .24);
+    }
+    .btn-primary:hover { background: var(--teal-dark); }
+    .btn-secondary {
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.2);
+      color: white;
+      backdrop-filter: blur(8px);
+    }
+    .btn-light {
+      background: white;
+      color: var(--navy);
+      border-color: var(--line);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.14);
+      color: #dbeafe;
+      padding: .55rem .9rem;
+      border-radius: 999px;
+      font-size: .92rem;
+      margin-bottom: 1rem;
+    }
+
+    header.hero-wrap {
+      background: radial-gradient(circle at 20% 20%, rgba(59,130,246,.28), transparent 28%), linear-gradient(135deg, #0d2f6b 0%, #1f54bf 55%, #2c7ef7 100%);
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+    header.hero-wrap::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -80px -10%;
+      height: 180px;
+      background: rgba(255,255,255,.08);
+      filter: blur(50px);
+      border-radius: 50%;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 0;
+      position: relative;
+      z-index: 2;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -.02em;
+    }
+    .logo-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.10);
+      display: grid;
+      place-items: center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+      overflow: hidden;
+      padding: 4px;
+    }
+    .logo-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.4rem;
+      align-items: center;
+      color: #dfeaff;
+      font-weight: 600;
+    }
+    .nav-links a:hover { color: white; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 2.5rem;
+      align-items: center;
+      padding: 3rem 0 5.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 5vw, 4.25rem);
+      line-height: .98;
+      letter-spacing: -.04em;
+      margin: 0 0 1rem;
+      max-width: 11ch;
+    }
+    .hero p {
+      font-size: 1.12rem;
+      color: #dbeafe;
+      max-width: 58ch;
+      margin: 0 0 1.4rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: .9rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.4rem;
+    }
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem 1rem;
+      color: #e5efff;
+      font-weight: 600;
+      font-size: .98rem;
+      max-width: 530px;
+    }
+    .hero-points div::before {
+      content: "✓";
+      margin-right: .55rem;
+      color: #7cf4de;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 26px;
+      padding: 1rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 25px 60px rgba(8, 26, 58, .22);
+    }
+    .dashboard {
+      background: linear-gradient(180deg, #f9fbff 0%, #eef5ff 100%);
+      border-radius: 22px;
+      padding: 1rem;
+      color: var(--text);
+      min-height: 440px;
+      box-shadow: inset 0 0 0 1px #e2ebf7;
+    }
+    .dash-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .dots { display: flex; gap: .4rem; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #c6d6ef; }
+    .dash-pill {
+      background: #e5f7f4;
+      color: #0f766e;
+      font-weight: 700;
+      padding: .45rem .75rem;
+      border-radius: 999px;
+      font-size: .85rem;
+    }
+    .queue-panel {
+      background: white;
+      border-radius: 18px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+      border: 1px solid #ebf1f8;
+    }
+    .queue-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: .9rem;
+    }
+    .queue-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .85rem .9rem;
+      border-radius: 14px;
+      background: #f8fbff;
+      border: 1px solid #e8f0fb;
+      margin-bottom: .7rem;
+      font-weight: 700;
+    }
+    .queue-item.active {
+      background: #e8f7f4;
+      border-color: #b4ece3;
+    }
+    .queue-num {
+      color: var(--muted);
+      width: 1.5rem;
+    }
+    .queue-meta {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+    }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: .88rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--blue), #66a3ff);
+    }
+    .tag {
+      background: #edf5ff;
+      color: #3963a9;
+      border-radius: 999px;
+      padding: .3rem .6rem;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .cta-row {
+      display: flex;
+      gap: .8rem;
+      flex-wrap: wrap;
+    }
+    .mini-btn {
+      background: var(--navy);
+      color: white;
+      padding: .9rem 1rem;
+      border-radius: 14px;
+      font-weight: 700;
+      flex: 1 1 180px;
+      text-align: center;
+    }
+    .mini-btn.alt {
+      background: white;
+      color: var(--navy);
+      border: 1px solid var(--line);
+    }
+
+    section {
+      padding: 5rem 0;
+    }
+    .section-label {
+      display: inline-block;
+      background: var(--soft-blue);
+      color: var(--blue);
+      font-weight: 800;
+      font-size: .85rem;
+      padding: .45rem .7rem;
+      border-radius: 999px;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      margin-bottom: .9rem;
+    }
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 2rem;
+    }
+    .section-head h2 {
+      margin: 0 0 .8rem;
+      font-size: clamp(2rem, 3.2vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .cred {
+      background: #f9fbfd;
+      border-top: 1px solid #edf3fa;
+      border-bottom: 1px solid #edf3fa;
+      padding: 1.1rem 0;
+    }
+    .cred-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .cred-chip {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .55rem .85rem;
+      color: var(--navy);
+    }
+
+    .problem-solution {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.4rem;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .issue-grid, .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .issue, .benefit {
+      background: #f8fbff;
+      border: 1px solid #e6eef8;
+      border-radius: 18px;
+      padding: 1rem;
+      min-height: 125px;
+    }
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: .85rem;
+      background: var(--soft-blue);
+      color: var(--blue);
+    }
+    .benefit .icon {
+      background: #e8f7f4;
+      color: #0f766e;
+    }
+    .issue h3, .benefit h3 {
+      margin: 0 0 .35rem;
+      font-size: 1.03rem;
+    }
+    .issue p, .benefit p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .feature-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 1.3rem;
+      box-shadow: var(--shadow);
+    }
+    .feature-card h3 {
+      margin: .8rem 0 .45rem;
+      font-size: 1.1rem;
+    }
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .step {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 1.3rem;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      margin-bottom: .9rem;
+    }
+    .step h3 {
+      margin: 0 0 .35rem;
+      font-size: 1.05rem;
+    }
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .use-cases {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .case-card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+    .case-card ul {
+      margin: .8rem 0 0;
+      padding-left: 1.15rem;
+      color: var(--muted);
+    }
+    .case-card li { margin: .45rem 0; }
+
+    .demo-box {
+      background: linear-gradient(135deg, #e8f7f4 0%, #eef5ff 100%);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.2rem;
+      align-items: center;
+    }
+    .demo-play {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      box-shadow: 0 12px 24px rgba(22, 59, 122, .22);
+    }
+
+    .cta {
+      background: linear-gradient(135deg, #0d2f6b 0%, #1f54bf 55%, #2c7ef7 100%);
+      color: white;
+      text-align: center;
+      border-radius: 30px;
+      padding: 3rem 1.5rem;
+      box-shadow: 0 30px 60px rgba(22,59,122,.22);
+    }
+    .cta h2 {
+      margin: 0 0 .8rem;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.02;
+      letter-spacing: -.03em;
+    }
+    .cta p {
+      margin: 0 auto 1.4rem;
+      color: #dbeafe;
+      max-width: 680px;
+      font-size: 1.06rem;
+    }
+
+    footer {
+      padding: 2rem 0 3rem;
+      color: var(--muted);
+    }
+    .footer-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-top: 1px solid #ebf1f8;
+      padding-top: 1.5rem;
+    }
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1000px) {
+      .hero,
+      .problem-solution,
+      .features-grid,
+      .steps,
+      .use-cases,
+      .demo-box {
+        grid-template-columns: 1fr;
+      }
+      .hero-card { order: -1; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 720px) {
+      .issue-grid,
+      .benefit-grid,
+      .hero-points {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        padding-top: 1.5rem;
+        padding-bottom: 4rem;
+      }
+      .dashboard { min-height: auto; }
+      .demo-box {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero-wrap">
+    <div class="container">
+      <nav>
+        <a href="#top" class="logo">
+          <span class="logo-mark"><img src="logo.JPG" alt="Queue-Master logo" /></span>
+          <span>Queue-Master</span>
+        </a>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#use-cases">Use Cases</a>
+          <a href="#demo">Demo</a>
+          <a href="#about">About</a>
+          <a href="https://queue-master.base44.app" target="_blank" rel="noopener">Log In</a>
+          <a class="btn btn-primary" href="https://queue-master.base44.app" target="_blank" rel="noopener">Start Free</a>
+        </div>
+      </nav>
+
+      <div class="hero" id="top">
+        <div>
+          <div class="badge">getqueuemaster.com</div>
+          <h1>Stop Managing the List. Know Who’s Next Instantly.</h1>
+          <p>Queue-Master automatically manages task rotations so your team always knows who is next — eliminating paper lists, phone calls, and confusion.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://queue-master.base44.app" target="_blank" rel="noopener">Start Using Queue-Master</a>
+            <a class="btn btn-secondary" href="#demo">Watch 60-Second Demo</a>
+          </div>
+          <div class="hero-points">
+            <div>Instantly see who’s next</div>
+            <div>Fair and transparent rotation</div>
+            <div>Works on desktop and mobile</div>
+            <div>Built for busy teams</div>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="dashboard">
+            <div class="dash-top">
+              <div class="dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+              <div class="dash-pill">Live Queue</div>
+            </div>
+
+            <div class="queue-panel">
+              <div class="queue-title">Next in Queue</div>
+              <div class="queue-item active">
+                <div class="queue-meta">
+                  <span class="queue-num">1</span>
+                  <span class="avatar">DS</span>
+                  <span>Dr. Smith</span>
+                </div>
+                <span class="tag">Next Up</span>
+              </div>
+              <div class="queue-item">
+                <div class="queue-meta">
+                  <span class="queue-num">2</span>
+                  <span class="avatar">DP</span>
+                  <span>Dr. Patel</span>
+                </div>
+                <span class="tag">Queued</span>
+              </div>
+              <div class="queue-item">
+                <div class="queue-meta">
+                  <span class="queue-num">3</span>
+                  <span class="avatar">DL</span>
+                  <span>Dr. Lee</span>
+                </div>
+                <span class="tag">Queued</span>
+              </div>
+            </div>
+
+            <div class="queue-panel">
+              <div class="queue-title">Today’s Assignment</div>
+              <p style="margin:0 0 1rem;color:var(--muted);">Assign the next task with one click and automatically advance the rotation.</p>
+              <div class="cta-row">
+                <a class="mini-btn" href="https://queue-master.base44.app" target="_blank" rel="noopener">Assign Next Person</a>
+                <div class="mini-btn alt">Comments Optional</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="cred">
+    <div class="container">
+      <div class="cred-row">
+        <span>Designed for teams that need fair, organized task rotation.</span>
+        <span class="cred-chip">Healthcare</span>
+        <span class="cred-chip">Operations</span>
+        <span class="cred-chip">Business Teams</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">The Problem & Solution</span>
+        <h2>Manual rotation systems break down when work gets busy.</h2>
+        <p>Many teams still rely on informal methods to manage task rotations. Queue-Master replaces manual tracking with a simple, real-time system that keeps everyone aligned.</p>
+      </div>
+
+      <div class="problem-solution">
+        <div class="panel">
+          <h3 style="margin-top:0;font-size:1.35rem;">What teams are dealing with now</h3>
+          <p style="color:var(--muted);margin-bottom:0;">Small inefficiencies add up quickly and create unnecessary delays.</p>
+          <div class="issue-grid">
+            <div class="issue">
+              <div class="icon">📝</div>
+              <h3>Paper Lists</h3>
+              <p>Hard to update, easy to lose, and never fully current.</p>
+            </div>
+            <div class="issue">
+              <div class="icon">📋</div>
+              <h3>Whiteboards</h3>
+              <p>Visible, but manual and quickly outdated in busy workflows.</p>
+            </div>
+            <div class="issue">
+              <div class="icon">📞</div>
+              <h3>Calling Around</h3>
+              <p>Time gets wasted tracking down who is actually next.</p>
+            </div>
+            <div class="issue">
+              <div class="icon">❓</div>
+              <h3>Confusion</h3>
+              <p>Someone already took the task, but the list says otherwise.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="background:linear-gradient(180deg,#fbfffe 0%, #f3fbfa 100%);">
+          <h3 style="margin-top:0;font-size:1.35rem;">How Queue-Master helps</h3>
+          <p style="color:var(--muted);margin-bottom:0;">A single live view of the queue means everyone sees the same thing at the same time.</p>
+          <div class="benefit-grid">
+            <div class="benefit">
+              <div class="icon">👀</div>
+              <h3>See Who’s Next</h3>
+              <p>Every team member can instantly view the current order.</p>
+            </div>
+            <div class="benefit">
+              <div class="icon">🔄</div>
+              <h3>Auto-Advance Rotation</h3>
+              <p>Once a task is assigned, the queue moves forward automatically.</p>
+            </div>
+            <div class="benefit">
+              <div class="icon">🤝</div>
+              <h3>Stay Aligned</h3>
+              <p>A shared system reduces miscommunication and handoff friction.</p>
+            </div>
+            <div class="benefit">
+              <div class="icon">⚡</div>
+              <h3>No Wasted Time</h3>
+              <p>Less manual tracking means more focus on the work itself.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" style="background:var(--bg);">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Features</span>
+        <h2>A smarter way to manage rotations.</h2>
+        <p>Queue-Master is intentionally simple, fast to use, and flexible enough to support many different operational workflows.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="icon">⏱</div>
+          <h3>Real-Time Queue Visibility</h3>
+          <p>Everyone can instantly see who is next without checking paper lists or calling around.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">⚖️</div>
+          <h3>Fair Task Distribution</h3>
+          <p>Automatically rotate assignments so workloads stay transparent and balanced.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🗒</div>
+          <h3>Optional Comments & Audit Trail</h3>
+          <p>Admins can require comments for documentation, keep them optional, or disable them entirely.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔐</div>
+          <h3>Admin Controls</h3>
+          <p>Customize queue behavior for your organization’s specific workflow and policies.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📱</div>
+          <h3>Works on Any Device</h3>
+          <p>Use Queue-Master from desktop, tablet, or phone so your team can access it anywhere.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🧩</div>
+          <h3>Adaptable Workflow</h3>
+          <p>Built to support healthcare teams, operations groups, and business task rotations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-it-works">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">How It Works</span>
+        <h2>Simple enough for daily use.</h2>
+        <p>Queue-Master is designed to fit naturally into busy workflows with minimal training.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Create your queue</h3>
+          <p>Set up a queue for your team, service line, or operational workflow.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Add team members</h3>
+          <p>Invite the people who participate in the rotation and define their order.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Assign the next task</h3>
+          <p>Select the next person when a task needs to be assigned.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Advance automatically</h3>
+          <p>The queue updates immediately so everyone knows who is next.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="use-cases" style="background:var(--bg);">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Built for Real-World Workflows</span>
+        <h2>Designed for teams that rely on fair and organized task rotation.</h2>
+        <p>The platform is intentionally simple so it can be adapted to many different workflows.</p>
+      </div>
+
+      <div class="use-cases">
+        <div class="case-card">
+          <div class="icon">🏥</div>
+          <h3>Healthcare Teams</h3>
+          <ul>
+            <li>Admission rotations</li>
+            <li>Consultation services</li>
+            <li>Procedure scheduling</li>
+          </ul>
+        </div>
+        <div class="case-card">
+          <div class="icon">🛠</div>
+          <h3>Operations Teams</h3>
+          <ul>
+            <li>Escalation queues</li>
+            <li>Service rotations</li>
+            <li>Support assignments</li>
+          </ul>
+        </div>
+        <div class="case-card">
+          <div class="icon">💼</div>
+          <h3>Business Teams</h3>
+          <ul>
+            <li>Duty rotations</li>
+            <li>Task distribution</li>
+            <li>Workflow sequencing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label">Demo</span>
+        <h2>See Queue-Master in action.</h2>
+        <p>Show how your team replaces paper lists and manual calls with one clear, real-time queue.</p>
+      </div>
+      <div class="demo-box">
+        <div>
+          <h3 style="margin:0 0 .5rem;font-size:1.4rem;">Add your product demo video here</h3>
+          <p style="margin:0;color:var(--muted);">Replace this section with your HeyGen video embed, Loom link, or hosted walkthrough. You can also keep this as a call-to-action that links directly to your demo.</p>
+        </div>
+        <a class="demo-play" href="#" aria-label="Play demo video">▶</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="cta">
+        <h2>Simplify your team’s workflow.</h2>
+        <p>Stop chasing the list. Start focusing on the work that matters.</p>
+        <a class="btn btn-primary" href="https://queue-master.base44.app" target="_blank" rel="noopener">Try Queue-Master</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <strong style="color:var(--navy);">Queue-Master</strong><br />
+        <span style="display:inline-block;margin-top:.25rem;color:var(--blue);font-weight:700;">getqueuemaster.com</span><br />
+        <span>A simple, powerful way to manage task rotations.</span>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#use-cases">Use Cases</a>
+        <a href="#demo">Demo</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
