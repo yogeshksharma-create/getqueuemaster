@@ -3,608 +3,651 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Queue-Master | getqueuemaster.com</title>
-  <meta name="description" content="Queue-Master helps teams manage task rotations with a simple, real-time queue. Eliminate paper lists, phone calls, and confusion. Visit getqueuemaster.com." />
+  <title>GetQueueMaster.com | Fair, Fast, Organized Task Rotation</title>
+  <meta
+    name="description"
+    content="QueueMaster keeps teams aligned with a simple, real-time rotation system. No paper lists, no calling around, no confusion."
+  />
   <style>
     :root {
-      --navy: #163b7a;
-      --blue: #2563eb;
-      --teal: #14b8a6;
-      --teal-dark: #0f9d8d;
-      --text: #16324f;
-      --muted: #5d718b;
-      --bg: #f7fafc;
-      --card: #ffffff;
-      --line: #dbe7f3;
-      --soft-green: #edf8ee;
-      --soft-blue: #eef5ff;
-      --shadow: 0 12px 32px rgba(22, 59, 122, 0.10);
-      --radius: 20px;
+      --bg: #f6fbf7;
+      --surface: #ffffff;
+      --surface-soft: #f1f7f3;
+      --text: #16325c;
+      --muted: #58708d;
+      --line: rgba(22, 50, 92, 0.1);
+      --brand: #183764;
+      --accent: #8be7e8;
+      --shadow: 0 20px 60px rgba(18, 39, 73, 0.12);
+      --radius: 28px;
+      --radius-sm: 18px;
       --max: 1180px;
     }
 
     * { box-sizing: border-box; }
+
     html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
-      background: #fff;
-      line-height: 1.55;
+      background:
+        radial-gradient(circle at top left, rgba(139, 231, 232, 0.22), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(24, 55, 100, 0.08), transparent 25%),
+        var(--bg);
+      line-height: 1.5;
     }
 
-    a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
 
     .container {
-      width: min(var(--max), calc(100% - 2rem));
+      width: min(var(--max), calc(100% - 32px));
       margin: 0 auto;
     }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(246, 251, 247, 0.78);
+      border-bottom: 1px solid rgba(22, 50, 92, 0.06);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 78px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.1rem;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #183764;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 12px 24px rgba(24, 55, 100, 0.18);
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .brand-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover { color: var(--brand); }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: .5rem;
-      padding: 0.95rem 1.4rem;
-      border-radius: 14px;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 999px;
       font-weight: 700;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      font-size: 0.98rem;
+      transition: 0.2s ease;
       border: 1px solid transparent;
       cursor: pointer;
     }
-    .btn:hover { transform: translateY(-1px); }
+
     .btn-primary {
-      background: var(--teal);
+      background: var(--brand);
       color: white;
-      box-shadow: 0 10px 24px rgba(20, 184, 166, .24);
+      box-shadow: 0 16px 30px rgba(24, 55, 100, 0.18);
     }
-    .btn-primary:hover { background: var(--teal-dark); }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 36px rgba(24, 55, 100, 0.22);
+    }
+
     .btn-secondary {
-      background: rgba(255,255,255,.14);
-      border-color: rgba(255,255,255,.2);
-      color: white;
-      backdrop-filter: blur(8px);
-    }
-    .btn-light {
-      background: white;
-      color: var(--navy);
+      background: rgba(255,255,255,0.7);
       border-color: var(--line);
+      color: var(--brand);
     }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.14);
-      color: #dbeafe;
-      padding: .55rem .9rem;
-      border-radius: 999px;
-      font-size: .92rem;
-      margin-bottom: 1rem;
-    }
-
-    header.hero-wrap {
-      background: radial-gradient(circle at 20% 20%, rgba(59,130,246,.28), transparent 28%), linear-gradient(135deg, #0d2f6b 0%, #1f54bf 55%, #2c7ef7 100%);
-      color: white;
-      overflow: hidden;
-      position: relative;
-    }
-    header.hero-wrap::after {
-      content: "";
-      position: absolute;
-      inset: auto -10% -80px -10%;
-      height: 180px;
-      background: rgba(255,255,255,.08);
-      filter: blur(50px);
-      border-radius: 50%;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.1rem 0;
-      position: relative;
-      z-index: 2;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: .7rem;
-      font-weight: 800;
-      font-size: 1.25rem;
-      letter-spacing: -.02em;
-    }
-    .logo-mark {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.10);
-      display: grid;
-      place-items: center;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
-      overflow: hidden;
-      padding: 4px;
-    }
-    .logo-mark img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 12px;
-      display: block;
-    }
-    .nav-links {
-      display: flex;
-      gap: 1.4rem;
-      align-items: center;
-      color: #dfeaff;
-      font-weight: 600;
-    }
-    .nav-links a:hover { color: white; }
 
     .hero {
+      padding: 68px 0 42px;
+    }
+
+    .hero-grid {
       display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 2.5rem;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 34px;
       align-items: center;
-      padding: 3rem 0 5.5rem;
-      position: relative;
-      z-index: 2;
     }
-    .hero h1 {
-      font-size: clamp(2.6rem, 5vw, 4.25rem);
-      line-height: .98;
-      letter-spacing: -.04em;
-      margin: 0 0 1rem;
-      max-width: 11ch;
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(22, 50, 92, 0.08);
+      border-radius: 999px;
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 18px;
     }
-    .hero p {
-      font-size: 1.12rem;
-      color: #dbeafe;
-      max-width: 58ch;
-      margin: 0 0 1.4rem;
+
+    .eyebrow-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #55c6d2);
+      box-shadow: 0 0 0 8px rgba(139, 231, 232, 0.2);
     }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    .hero-copy p {
+      margin: 22px 0 0;
+      max-width: 640px;
+      font-size: 1.16rem;
+      color: var(--muted);
+    }
+
     .hero-actions {
       display: flex;
-      gap: .9rem;
       flex-wrap: wrap;
-      margin-bottom: 1.4rem;
+      gap: 14px;
+      margin-top: 30px;
     }
+
     .hero-points {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: .8rem 1rem;
-      color: #e5efff;
-      font-weight: 600;
-      font-size: .98rem;
-      max-width: 530px;
-    }
-    .hero-points div::before {
-      content: "✓";
-      margin-right: .55rem;
-      color: #7cf4de;
-    }
-
-    .hero-card {
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 26px;
-      padding: 1rem;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 25px 60px rgba(8, 26, 58, .22);
-    }
-    .dashboard {
-      background: linear-gradient(180deg, #f9fbff 0%, #eef5ff 100%);
-      border-radius: 22px;
-      padding: 1rem;
-      color: var(--text);
-      min-height: 440px;
-      box-shadow: inset 0 0 0 1px #e2ebf7;
-    }
-    .dash-top {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-    .dots { display: flex; gap: .4rem; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; background: #c6d6ef; }
-    .dash-pill {
-      background: #e5f7f4;
-      color: #0f766e;
-      font-weight: 700;
-      padding: .45rem .75rem;
-      border-radius: 999px;
-      font-size: .85rem;
-    }
-    .queue-panel {
-      background: white;
-      border-radius: 18px;
-      padding: 1rem;
-      box-shadow: var(--shadow);
-      margin-bottom: 1rem;
-      border: 1px solid #ebf1f8;
-    }
-    .queue-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: .9rem;
-    }
-    .queue-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: .85rem .9rem;
-      border-radius: 14px;
-      background: #f8fbff;
-      border: 1px solid #e8f0fb;
-      margin-bottom: .7rem;
-      font-weight: 700;
-    }
-    .queue-item.active {
-      background: #e8f7f4;
-      border-color: #b4ece3;
-    }
-    .queue-num {
-      color: var(--muted);
-      width: 1.5rem;
-    }
-    .queue-meta {
-      display: flex;
-      align-items: center;
-      gap: .7rem;
-    }
-    .avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: white;
-      font-size: .88rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--blue), #66a3ff);
-    }
-    .tag {
-      background: #edf5ff;
-      color: #3963a9;
-      border-radius: 999px;
-      padding: .3rem .6rem;
-      font-size: .78rem;
-      font-weight: 700;
-    }
-    .cta-row {
-      display: flex;
-      gap: .8rem;
       flex-wrap: wrap;
-    }
-    .mini-btn {
-      background: var(--navy);
-      color: white;
-      padding: .9rem 1rem;
-      border-radius: 14px;
+      gap: 14px 18px;
+      margin-top: 26px;
+      color: var(--brand);
       font-weight: 700;
-      flex: 1 1 180px;
-      text-align: center;
-    }
-    .mini-btn.alt {
-      background: white;
-      color: var(--navy);
-      border: 1px solid var(--line);
     }
 
-    section {
-      padding: 5rem 0;
-    }
-    .section-label {
-      display: inline-block;
-      background: var(--soft-blue);
-      color: var(--blue);
-      font-weight: 800;
-      font-size: .85rem;
-      padding: .45rem .7rem;
+    .hero-points span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid rgba(22, 50, 92, 0.08);
       border-radius: 999px;
-      letter-spacing: .02em;
-      text-transform: uppercase;
-      margin-bottom: .9rem;
+      font-size: 0.93rem;
     }
+
+    .hero-visual {
+      background: linear-gradient(180deg, #14315a 0%, #0a1325 100%);
+      border-radius: 34px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .hero-visual img {
+      width: 100%;
+      border-radius: 22px;
+      object-fit: cover;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
     .section-head {
       max-width: 760px;
-      margin-bottom: 2rem;
-    }
-    .section-head h2 {
-      margin: 0 0 .8rem;
-      font-size: clamp(2rem, 3.2vw, 3rem);
-      line-height: 1.05;
-      letter-spacing: -.03em;
-    }
-    .section-head p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1.05rem;
-    }
-
-    .cred {
-      background: #f9fbfd;
-      border-top: 1px solid #edf3fa;
-      border-bottom: 1px solid #edf3fa;
-      padding: 1.1rem 0;
-    }
-    .cred-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.4rem;
-      flex-wrap: wrap;
+      margin: 0 auto 26px;
       text-align: center;
-      color: var(--muted);
-      font-weight: 600;
-    }
-    .cred-chip {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: .55rem .85rem;
-      color: var(--navy);
     }
 
-    .problem-solution {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.4rem;
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
     }
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
+
+    .section-head p {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 1.07rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(22, 50, 92, 0.08);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-    }
-    .issue-grid, .benefit-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1rem;
-      margin-top: 1.25rem;
-    }
-    .issue, .benefit {
-      background: #f8fbff;
-      border: 1px solid #e6eef8;
-      border-radius: 18px;
-      padding: 1rem;
-      min-height: 125px;
-    }
-    .icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      font-size: 1.2rem;
-      font-weight: 800;
-      margin-bottom: .85rem;
-      background: var(--soft-blue);
-      color: var(--blue);
-    }
-    .benefit .icon {
-      background: #e8f7f4;
-      color: #0f766e;
-    }
-    .issue h3, .benefit h3 {
-      margin: 0 0 .35rem;
-      font-size: 1.03rem;
-    }
-    .issue p, .benefit p {
-      margin: 0;
-      color: var(--muted);
-      font-size: .95rem;
+      padding: 26px;
+      box-shadow: 0 16px 40px rgba(18, 39, 73, 0.06);
     }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem;
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
     }
-    .feature-card {
-      background: white;
-      border: 1px solid var(--line);
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    .media-card {
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(22, 50, 92, 0.08);
+      border-radius: 30px;
+      padding: 18px;
+      box-shadow: 0 20px 46px rgba(18, 39, 73, 0.08);
+    }
+
+    .media-card img,
+    .media-card video {
+      width: 100%;
       border-radius: 20px;
-      padding: 1.3rem;
-      box-shadow: var(--shadow);
+      background: #dfe8e2;
     }
-    .feature-card h3 {
-      margin: .8rem 0 .45rem;
-      font-size: 1.1rem;
+
+    .media-card h3 {
+      margin: 18px 0 8px;
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
     }
-    .feature-card p {
+
+    .media-card p {
       margin: 0;
       color: var(--muted);
     }
 
-    .steps {
+    .split {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
     }
-    .step {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 1.3rem;
-      position: relative;
-      box-shadow: var(--shadow);
+
+    .comparison {
+      padding: 28px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid rgba(22, 50, 92, 0.08);
+      box-shadow: 0 16px 40px rgba(18, 39, 73, 0.06);
     }
-    .step-num {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--navy);
-      color: white;
-      display: grid;
-      place-items: center;
+
+    .comparison .label {
+      display: inline-block;
+      font-size: 0.82rem;
       font-weight: 800;
-      margin-bottom: .9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
     }
-    .step h3 {
-      margin: 0 0 .35rem;
-      font-size: 1.05rem;
+
+    .comparison img {
+      border-radius: 20px;
+      width: 100%;
+      margin-bottom: 18px;
     }
-    .step p {
+
+    .comparison h3 {
+      margin: 0 0 10px;
+      font-size: 1.3rem;
+      letter-spacing: -0.03em;
+    }
+
+    .comparison ul {
       margin: 0;
-      color: var(--muted);
-      font-size: .95rem;
-    }
-
-    .use-cases {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem;
-    }
-    .case-card {
-      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 1.4rem;
-      box-shadow: var(--shadow);
-    }
-    .case-card ul {
-      margin: .8rem 0 0;
-      padding-left: 1.15rem;
+      padding-left: 18px;
       color: var(--muted);
     }
-    .case-card li { margin: .45rem 0; }
 
-    .demo-box {
-      background: linear-gradient(135deg, #e8f7f4 0%, #eef5ff 100%);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 2rem;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 1.2rem;
-      align-items: center;
-    }
-    .demo-play {
-      width: 78px;
-      height: 78px;
-      border-radius: 50%;
-      background: var(--navy);
-      color: white;
-      display: grid;
-      place-items: center;
-      font-size: 1.5rem;
-      box-shadow: 0 12px 24px rgba(22, 59, 122, .22);
-    }
+    .comparison li + li { margin-top: 8px; }
 
     .cta {
-      background: linear-gradient(135deg, #0d2f6b 0%, #1f54bf 55%, #2c7ef7 100%);
-      color: white;
-      text-align: center;
-      border-radius: 30px;
-      padding: 3rem 1.5rem;
-      box-shadow: 0 30px 60px rgba(22,59,122,.22);
-    }
-    .cta h2 {
-      margin: 0 0 .8rem;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1.02;
-      letter-spacing: -.03em;
-    }
-    .cta p {
-      margin: 0 auto 1.4rem;
-      color: #dbeafe;
-      max-width: 680px;
-      font-size: 1.06rem;
+      padding: 54px 0 80px;
     }
 
-    footer {
-      padding: 2rem 0 3rem;
+    .cta-box {
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      background: linear-gradient(135deg, #183764 0%, #0f2240 100%);
+      color: white;
+      padding: 40px;
+      box-shadow: 0 30px 70px rgba(14, 31, 59, 0.24);
+    }
+
+    .cta-box::before,
+    .cta-box::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(139, 231, 232, 0.12);
+    }
+
+    .cta-box::before {
+      width: 280px;
+      height: 280px;
+      right: -70px;
+      top: -110px;
+    }
+
+    .cta-box::after {
+      width: 220px;
+      height: 220px;
+      left: -70px;
+      bottom: -110px;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .cta-content h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .cta-content p {
+      margin: 14px 0 0;
+      max-width: 640px;
+      color: rgba(255,255,255,0.78);
+      font-size: 1.05rem;
+    }
+
+    .footer {
+      padding: 0 0 46px;
       color: var(--muted);
     }
-    .footer-grid {
+
+    .footer-inner {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 1rem;
+      align-items: center;
+      gap: 18px;
       flex-wrap: wrap;
-      border-top: 1px solid #ebf1f8;
-      padding-top: 1.5rem;
-    }
-    .footer-links {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      font-weight: 600;
+      padding-top: 26px;
+      border-top: 1px solid rgba(22, 50, 92, 0.08);
     }
 
-    @media (max-width: 1000px) {
-      .hero,
-      .problem-solution,
-      .features-grid,
-      .steps,
-      .use-cases,
-      .demo-box {
+    @media (max-width: 980px) {
+      .hero-grid,
+      .showcase,
+      .split,
+      .card-grid {
         grid-template-columns: 1fr;
       }
-      .hero-card { order: -1; }
-      .nav-links { display: none; }
-    }
 
-    @media (max-width: 720px) {
-      .issue-grid,
-      .benefit-grid,
-      .hero-points {
-        grid-template-columns: 1fr;
+      .nav-links {
+        display: none;
       }
+
       .hero {
-        padding-top: 1.5rem;
-        padding-bottom: 4rem;
-      }
-      .dashboard { min-height: auto; }
-      .demo-box {
-        text-align: left;
+        padding-top: 42px;
       }
     }
-<a href="contact.html">Try App</a>
-</div>
-</nav>
-</div>
-</header>
 
-<section class="hero">
-<div class="container">
-<h1>Fair, Fast Task Rotation</h1>
-<p>A simple real‑time queue so your team always knows who is next.</p>
-<a class="btn" href="https://queue-master.base44.app" target="_blank">Launch QueueMaster</a>
-</div>
-</section>
+    @media (max-width: 640px) {
+      .container {
+        width: min(var(--max), calc(100% - 20px));
+      }
 
-<section class="section">
-<div class="container grid">
-<div class="card">
-<h3>See who's next</h3>
-<p>Everyone views the same queue so assignments stay clear.</p>
-</div>
-<div class="card">
-<h3>Fair rotation</h3>
-<p>The queue automatically advances after each assignment.</p>
-</div>
-<div class="card">
-<h3>No manual tracking</h3>
-<p>Eliminate paper lists, whiteboards, and confusion.</p>
-</div>
-</div>
-</section>
+      .site-header .nav {
+        min-height: 70px;
+      }
 
-<section class="section">
-<div class="container">
-<img src="Queuemasterpage.jpg" alt="QueueMaster interface">
-</div>
-</section>
+      h1 {
+        font-size: 2.55rem;
+      }
 
-<footer>
-© 2026 GetQueueMaster.com
-</footer>
+      .hero-copy p,
+      .section-head p,
+      .cta-content p {
+        font-size: 1rem;
+      }
+
+      .cta-box,
+      .card,
+      .comparison,
+      .media-card,
+      .hero-visual {
+        border-radius: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#top" class="brand" aria-label="QueueMaster Home">
+        <span class="brand-mark">
+          <img src="logo.JPG" alt="QueueMaster logo" />
+        </span>
+        <span>GetQueueMaster</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main Navigation">
+        <a href="#problem">Problem</a>
+        <a href="#solution">Solution</a>
+        <a href="#demo">Demo</a>
+        <a href="#why">Why QueueMaster</a>
+      </nav>
+
+      <a class="btn btn-primary" href="https://queue-master.base44.app" target="_blank" rel="noopener noreferrer">Open App</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            Real-time task rotation for busy teams
+          </div>
+          <h1>Fair, fast, organized task rotation.</h1>
+          <p>
+            QueueMaster gives your team one clear view of who is next. No paper lists,
+            no calling around, and no confusion when work gets busy.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://queue-master.base44.app" target="_blank" rel="noopener noreferrer">Launch QueueMaster</a>
+            <a class="btn btn-secondary" href="#demo">Watch Demo</a>
+          </div>
+          <div class="hero-points">
+            <span>✓ Instantly see who’s next</span>
+            <span>✓ Keep rotations fair</span>
+            <span>✓ Reduce wasted time</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <img src="Queuemasterpage.jpg" alt="QueueMaster app interface showing next up and rotation list" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="container">
+        <div class="section-head">
+          <h2>Manual rotation systems break down under pressure.</h2>
+          <p>
+            When teams rely on paper lists, whiteboards, or phone calls, small inefficiencies turn into delays,
+            duplicate assignments, and frustrated staff.
+          </p>
+        </div>
+
+        <div class="showcase">
+          <article class="media-card">
+            <img src="manual insufficiency.JPG" alt="Graphic showing paper lists, whiteboards, calling around, and confusion" />
+            <h3>The old way creates friction.</h3>
+            <p>Informal systems become unreliable as volume increases and workflows get more complex.</p>
+          </article>
+
+          <article class="media-card">
+            <img src="Queuemaster advantage.JPG" alt="Graphic showing QueueMaster alignment and rotation advancement" />
+            <h3>The QueueMaster approach stays clear.</h3>
+            <p>Everyone sees the queue, assignments move forward automatically, and the team stays aligned.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="solution">
+      <div class="container">
+        <div class="section-head">
+          <h2>Built for real-world workflows.</h2>
+          <p>
+            QueueMaster is intentionally simple so it can adapt to many team-based rotation systems without adding extra complexity.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <article class="card">
+            <h3>Healthcare teams</h3>
+            <p>Admission rotations, consultation services, procedure scheduling, and other operational workflows.</p>
+          </article>
+          <article class="card">
+            <h3>Operations teams</h3>
+            <p>Escalation queues, service rotations, support assignments, and time-sensitive task distribution.</p>
+          </article>
+          <article class="card">
+            <h3>Business teams</h3>
+            <p>Duty rotations, shared responsibilities, workflow sequencing, and fair distribution across staff.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="demo">
+      <div class="container">
+        <div class="section-head">
+          <h2>See QueueMaster in action.</h2>
+          <p>
+            Clean, visible, and easy to use. Open the queue, confirm the next assignment, and keep the whole team in sync.
+          </p>
+        </div>
+
+        <div class="showcase">
+          <article class="media-card">
+            <video controls playsinline preload="metadata" poster="Queuemasterpage.jpg">
+              <source src="QueueMaster_ Efficient ER Rotation_1080p_caption.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <h3>Quick product demo</h3>
+            <p>Use this section to show how QueueMaster removes the need to manually track who is next.</p>
+          </article>
+
+          <article class="media-card">
+            <img src="Queuemasterpage.jpg" alt="QueueMaster interface with next up card and rotation list" />
+            <h3>One clear source of truth</h3>
+            <p>The interface highlights the next person up and makes the full rotation easy to review at a glance.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="container split">
+        <article class="comparison">
+          <span class="label">Without QueueMaster</span>
+          <img src="manual insufficiency.JPG" alt="Manual process illustration" />
+          <h3>Manual coordination slows teams down.</h3>
+          <ul>
+            <li>People have to ask around to see who is next.</li>
+            <li>Assignments can be disputed or duplicated.</li>
+            <li>Paper and ad hoc systems become hard to trust.</li>
+          </ul>
+        </article>
+
+        <article class="comparison">
+          <span class="label">With QueueMaster</span>
+          <img src="Queuemaster advantage.JPG" alt="QueueMaster advantage illustration" />
+          <h3>Teams move faster with shared clarity.</h3>
+          <ul>
+            <li>Everyone sees the same real-time queue.</li>
+            <li>Rotation advances clearly after assignment.</li>
+            <li>Workflows stay fair, transparent, and efficient.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <div class="cta-box">
+          <div class="cta-content">
+            <div>
+              <h2>Stop managing the list. Start managing the work.</h2>
+              <p>
+                QueueMaster helps teams spend less time coordinating and more time getting the right work done.
+              </p>
+            </div>
+            <a class="btn btn-primary" href="https://queue-master.base44.app" target="_blank" rel="noopener noreferrer">Try QueueMaster</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>© 2026 GetQueueMaster.com</div>
+      <div>Built for modern task rotation workflows.</div>
+    </div>
+  </footer>
 </body>
 </html>
