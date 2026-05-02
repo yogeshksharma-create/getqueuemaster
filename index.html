@@ -121,12 +121,18 @@
     .store-badge {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      width: 140px;
+      height: 45px;
       line-height: 0;
+      overflow: hidden;
     }
 
     .store-badge img {
-      height: 45px;
+      max-height: 100%;
+      max-width: 100%;
       width: auto;
+      height: auto;
       display: block;
     }
     .btn {
@@ -511,7 +517,7 @@
         <a href="#demo">Demo</a>
         <a href="#why">Why Queue-Master</a>
       </nav>
-           <div class="store-badges">
+                <div class="store-badges">
         <a class="store-badge" href="https://play.google.com/store/apps/details?id=com.base699d08fbfd1600d36616495a.app" target="_blank" rel="noopener noreferrer">
           <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
                alt="Get it on Google Play">
