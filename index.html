@@ -112,10 +112,34 @@
     }
 
     .nav-links a:hover { color: var(--brand); }
- .store-badges {
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(22, 50, 92, 0.12);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.82);
+      color: var(--brand);
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(18, 39, 73, 0.06);
+    }
+
+    .store-badges {
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .store-badge {
@@ -150,7 +174,7 @@
     }
 
     .btn-primary {
-      background: var(--brand);
+      background: linear-gradient(135deg, var(--brand) 0%, #255a99 100%);
       color: white;
       box-shadow: 0 16px 30px rgba(24, 55, 100, 0.18);
     }
@@ -161,9 +185,10 @@
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.7);
-      border-color: var(--line);
+      background: rgba(255,255,255,0.78);
+      border-color: rgba(22, 50, 92, 0.12);
       color: var(--brand);
+      box-shadow: 0 10px 24px rgba(18, 39, 73, 0.05);
     }
 
     .hero {
@@ -244,7 +269,7 @@
       background: linear-gradient(180deg, #14315a 0%, #0a1325 100%);
       border-radius: 34px;
       padding: 18px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 30px 70px rgba(14, 31, 59, 0.24);
       border: 1px solid rgba(255,255,255,0.08);
     }
 
@@ -455,6 +480,26 @@
       border-top: 1px solid rgba(22, 50, 92, 0.08);
     }
 
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px 0 0;
+    }
+
+    .mobile-menu a {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(22, 50, 92, 0.08);
+      color: var(--brand);
+      font-weight: 600;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
     @media (max-width: 980px) {
       .hero-grid,
       .showcase,
@@ -465,6 +510,22 @@
 
       .nav-links {
         display: none;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      .nav {
+        flex-wrap: wrap;
+        padding: 14px 0;
+      }
+
+      .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+        margin-left: 0;
+        margin-top: 8px;
       }
 
       .hero {
@@ -481,8 +542,27 @@
         min-height: 70px;
       }
 
+      .nav-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .store-badges {
+        width: 100%;
+      }
+
+      .store-badge {
+        width: 124px;
+        height: 40px;
+      }
+
       h1 {
         font-size: 2.55rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
       }
 
       .hero-copy p,
@@ -510,60 +590,37 @@
         </span>
         <span>GetQueueMaster</span>
       </a>
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+      </button>
       <nav class="nav-links" aria-label="Main Navigation">
         <a href="#problem">Problem</a>
         <a href="#solution">Solution</a>
         <a href="#demo">Demo</a>
         <a href="#why">Why Queue-Master</a>
-        <a href="/tempo.html" target="_blank" style="display:flex;">
-    <img
-      src="/Tempo_logo.png"
-      alt="Visit Tempo-Calender"
-      style="
-        height:60px;
-        width:60px;
-        display:block;
-      "> Tempo
-  </a>
+        <a href="/tempo.html" target="_blank" style="display:flex; align-items:center; gap:8px;">
+          <img src="/Tempo_logo.png" alt="Visit Tempo-Calender" style="height:34px; width:34px; display:block;">
+          <span>Tempo</span>
+        </a>
       </nav>
-                <div style="
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:14px;
-  flex-wrap:wrap;
-  position:relative;
-  z-index:20;
-">
-
-  <!-- Apple -->
-  <a href="https://apple.co/4sHuvv7" target="_blank" style="display:flex;">
-    <img
-      src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-      alt="Download on the App Store"
-      style="
-        height:45px;
-        width:auto;
-        display:block;
-      ">
-  </a>
-
-  <!-- Google -->
-  <a href="https://play.google.com/store/apps/developer?id=Y+sharma+MD+inc&hl=en_US"
-     target="_blank"
-     style="display:flex;">
-    <img
-      src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-      alt="Get it on Google Play"
-      style="
-        height:60px;
-        width:auto;
-        display:block;
-      ">
-  </a>
-
-</div>
-      <a class="btn btn-primary" href="https://app.getqueuemaster.com" target="_blank" rel="noopener noreferrer">Open App</a>
+      <div class="nav-actions">
+        <div class="store-badges">
+          <a class="store-badge" href="https://apple.co/4sHuvv7" target="_blank" rel="noopener noreferrer">
+            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" />
+          </a>
+          <a class="store-badge" href="https://play.google.com/store/apps/developer?id=Y+sharma+MD+inc&hl=en_US" target="_blank" rel="noopener noreferrer">
+            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" />
+          </a>
+        </div>
+        <a class="btn btn-primary" href="https://app.getqueuemaster.com" target="_blank" rel="noopener noreferrer">Open App</a>
+      </div>
+    </div>
+    <div class="container mobile-menu" id="mobileMenu">
+      <a href="#problem" onclick="toggleMenu(false)">Problem</a>
+      <a href="#solution" onclick="toggleMenu(false)">Solution</a>
+      <a href="#demo" onclick="toggleMenu(false)">Demo</a>
+      <a href="#why" onclick="toggleMenu(false)">Why Queue-Master</a>
+      <a href="/tempo.html" target="_blank" onclick="toggleMenu(false)">Tempo</a>
     </div>
   </header>
 
@@ -732,5 +789,22 @@
       <div>Built for modern task rotation workflows.</div>
     </div>
   </footer>
+
+  <script>
+    function toggleMenu(force) {
+      const menu = document.getElementById('mobileMenu');
+      if (!menu) return;
+      const shouldOpen = typeof force === 'boolean' ? force : !menu.classList.contains('open');
+      menu.classList.toggle('open', shouldOpen);
+    }
+
+    document.addEventListener('click', function (event) {
+      const menu = document.getElementById('mobileMenu');
+      const toggle = document.querySelector('.menu-toggle');
+      if (window.innerWidth <= 980 && menu && toggle && !menu.contains(event.target) && !toggle.contains(event.target)) {
+        toggleMenu(false);
+      }
+    });
+  </script>
 </body>
 </html>
